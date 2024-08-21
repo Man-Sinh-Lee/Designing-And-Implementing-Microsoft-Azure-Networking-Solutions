@@ -86,7 +86,7 @@
     "resources": [
       {
         "type": "Microsoft.Network/ipGroups",
-        "apiVersion": "2022-01-01",
+        "apiVersion": "2019-09-01",
         "name": "[parameters('workloadIpGroupName')]",
         "location": "[parameters('location')]",
         "properties": {
@@ -98,7 +98,7 @@
       },
       {
         "type": "Microsoft.Network/ipGroups",
-        "apiVersion": "2022-01-01",
+        "apiVersion": "2019-09-01",
         "name": "[parameters('infraIpGroupName')]",
         "location": "[parameters('location')]",
         "properties": {
@@ -110,7 +110,7 @@
       },
       {
         "type": "Microsoft.Network/virtualNetworks",
-        "apiVersion": "2022-01-01",
+        "apiVersion": "2019-09-01",
         "name": "[parameters('virtualNetworkName')]",
         "location": "[parameters('location')]",
         "tags": {
@@ -139,7 +139,7 @@
           "count": "[length(range(0, parameters('numberOfPublicIPAddresses')))]"
         },
         "type": "Microsoft.Network/publicIPAddresses",
-        "apiVersion": "2022-01-01",
+        "apiVersion": "2019-09-01",
         "name": "[format('{0}{1}', variables('azurepublicIpname'), add(range(0, parameters('numberOfPublicIPAddresses'))[copyIndex()], 1))]",
         "location": "[parameters('location')]",
         "sku": {
@@ -152,7 +152,7 @@
       },
       {
         "type": "Microsoft.Network/firewallPolicies",
-        "apiVersion": "2022-01-01",
+        "apiVersion": "2019-09-01",
         "name": "[parameters('firewallPolicyName')]",
         "location": "[parameters('location')]",
         "properties": {
@@ -160,8 +160,8 @@
         }
       },
       {
-        "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-        "apiVersion": "2022-01-01",
+        "type": "Microsoft.Network/firewallPolicies/ruleGroups",
+        "apiVersion": "2019-09-01",
         "name": "[format('{0}/{1}', parameters('firewallPolicyName'), 'DefaultNetworkRuleCollectionGroup')]",
         "properties": {
           "priority": 200,
@@ -202,8 +202,8 @@
         ]
       },
       {
-        "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-        "apiVersion": "2022-01-01",
+        "type": "Microsoft.Network/firewallPolicies/ruleGroups",
+        "apiVersion": "2019-09-01",
         "name": "[format('{0}/{1}', parameters('firewallPolicyName'), 'DefaultApplicationRuleCollectionGroup')]",
         "properties": {
           "priority": 300,
@@ -273,7 +273,7 @@
         "dependsOn": [
           "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicyName'))]",
           "[resourceId('Microsoft.Network/ipGroups', parameters('infraIpGroupName'))]",
-          "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', parameters('firewallPolicyName'), 'DefaultNetworkRuleCollectionGroup')]",
+          "[resourceId('Microsoft.Network/firewallPolicies/ruleGroups', parameters('firewallPolicyName'), 'DefaultNetworkRuleCollectionGroup')]",
           "[resourceId('Microsoft.Network/ipGroups', parameters('workloadIpGroupName'))]"
         ]
       },
@@ -290,10 +290,10 @@
           }
         },
         "dependsOn": [
-          "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', parameters('firewallPolicyName'), 'DefaultApplicationRuleCollectionGroup')]",
+          "[resourceId('Microsoft.Network/firewallPolicies/ruleGroups', parameters('firewallPolicyName'), 'DefaultApplicationRuleCollectionGroup')]",
           "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicyName'))]",
           "[resourceId('Microsoft.Network/ipGroups', parameters('infraIpGroupName'))]",
-          "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', parameters('firewallPolicyName'), 'DefaultNetworkRuleCollectionGroup')]",
+          "[resourceId('Microsoft.Network/firewallPolicies/ruleGroups', parameters('firewallPolicyName'), 'DefaultNetworkRuleCollectionGroup')]",
           "publicIpAddress",
           "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
           "[resourceId('Microsoft.Network/ipGroups', parameters('workloadIpGroupName'))]"
